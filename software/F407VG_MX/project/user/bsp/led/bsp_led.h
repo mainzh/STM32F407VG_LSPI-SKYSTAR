@@ -17,7 +17,5 @@
 #define LED_TOGGLE()    do{HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);}while(0)       /* LED = !LED */
 
 /* 接口函数 */
-void bsp_led_init(void);    /* LED初始化 */
-void bsp_led_example(void);    /* LED试验 */
 
 #endif    /* __BSP_LED_H */

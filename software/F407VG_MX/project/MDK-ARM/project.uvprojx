@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F407xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../user/bsp;C:/Users/xhuan/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc;C:/Users/xhuan/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;C:/Users/xhuan/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Device/ST/STM32F4xx/Include;C:/Users/xhuan/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Include</IncludePath>
+              <IncludePath>../Core/Inc;../user/bsp;C:/Users/xhuan/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc;C:/Users/xhuan/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;C:/Users/xhuan/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Device/ST/STM32F4xx/Include;C:/Users/xhuan/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Include;../user/bsp/led;../user/bsp/uart;../user/bsp/vofa</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -528,12 +528,17 @@
             <File>
               <FileName>bsp_led.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\user\bsp\bsp_led.c</FilePath>
+              <FilePath>..\user\bsp\led\bsp_led.c</FilePath>
             </File>
             <File>
-              <FileName>bsp_serial.c</FileName>
+              <FileName>bsp_uart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\user\bsp\bsp_serial.c</FilePath>
+              <FilePath>..\user\bsp\uart\bsp_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>vofa.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\bsp\vofa\vofa.c</FilePath>
             </File>
           </Files>
         </Group>

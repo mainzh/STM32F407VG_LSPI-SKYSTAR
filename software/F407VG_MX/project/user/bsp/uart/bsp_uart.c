@@ -1,7 +1,7 @@
 #include "bsp.h"
 
 /* Use "printf" function without definition "use MicroLIB" ------------------------------------------------------------------*/
-#if SERIAL_PRINTF_EN    /*使能串口printf*/
+
 /* 使用AC6编译器
  */
 #if (__ARMCC_VERSION >= 6010050)
@@ -58,58 +58,45 @@ FILE __stdout;
  * 供printf函数最终调用，输出字符串 */
 int fputc(int ch, FILE *f)
 {
-    /* 等待上一个字符串发送完成
-     * 对 USART的 状态寄存器SR 的 位6 TC发送完成(Transmission complete) 位与操作 0X40(即01000000)
-     * 当TC为0，表示发送未完成，(SR & 0X40)为0，while循环条件为真，因为无操作，所以等待
-     * 当TC为1，表示发送已完成，(SR & 0X40)为1，while循环条件为假，跳过while循环 */
-    while ((SERIAL_USARTx->SERIAL_USART_ISR & 0X40) == 0);
-    
-    /* 将要发送的字符 ch 写入到 USART的 发送数据寄存器TDR */
-    SERIAL_USARTx->SERIAL_USART_TDR = (uint8_t) ch;
+    HAL_UART_Transmit(&bsp_huartx, (uint8_t *)&ch, 1, HAL_MAX_DELAY);
     
     return ch;
 }
-#endif
+
 /* Use "printf" function without definition "use MicroLIB" ------------------------------------------------------------------*/
 
 /* USART_RX ------------------------------------------------------------------*/
-#if SERIAL_RX_EN    /*使能串口接收*/
 
 /* 接收缓冲区, 最大USART_REC_LEN个字节，用于存储完整的数据帧 */
 uint8_t g_usart_rx_buf[USART_RX_LEN];
 
 /* 串口初始化 */
-void bsp_serial_init(void)
+//MX_USART1_UART_Init();
+
+/* 串口接收DMA中断开始 */
+void bsp_uart_rx_DMA_start(void)
 {
-    //MX_USART1_UART_Init();
-    LED(1);
-    printf("MCU发送：\n");
-    
-    /* 开启DMA接收串口空闲中断 */
-    HAL_UARTEx_ReceiveToIdle_DMA(&SERIAL_huartx,(uint8_t *)g_usart_rx_buf,sizeof(g_usart_rx_buf));
+    /* 开启串口接收空闲DMA中断 */
+    HAL_UARTEx_ReceiveToIdle_DMA(&bsp_huartx, (uint8_t *)g_usart_rx_buf, sizeof(g_usart_rx_buf));
     /* 关闭DMA传输过半中断(否则也将触发RxEventCallback回调函数) */
-    __HAL_DMA_DISABLE_IT(&SERIAL_hdma_usartx_rx,DMA_IT_HT);    /* (DMA通道的指针地址 , 要关闭的中断) */
+    __HAL_DMA_DISABLE_IT(&bsp_hdma_usartx_rx, DMA_IT_HT);    /* (DMA通道的指针地址 , 要关闭的中断) */
 }
 
 /* UART接收事件回调函数 */
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 {
     /* 判断使用此回调函数的串口 */
-    if(huart->Instance==SERIAL_USARTx)
+    if(huart->Instance == bsp_USARTx)
     {
-        LED_TOGGLE();
-        printf("MCU接收到：\n");
         /* 发送接收到的数据 */
-        HAL_UART_Transmit_DMA(&SERIAL_huartx,(uint8_t *)g_usart_rx_buf,Size);
+        HAL_UART_Transmit_DMA(&bsp_huartx, (uint8_t *)g_usart_rx_buf, Size);
         
         /* 数据的处理逻辑 */
         
         
-        /* 再次开启DMA接收串口空闲中断 */
-        HAL_UARTEx_ReceiveToIdle_DMA(&SERIAL_huartx,(uint8_t *)g_usart_rx_buf,sizeof(g_usart_rx_buf));
-        /* 关闭DMA传输过半中断(否则也将触发RxEventCallback回调函数) */
-        __HAL_DMA_DISABLE_IT(&SERIAL_hdma_usartx_rx,DMA_IT_HT);    /* (DMA通道的指针地址 , 要关闭的中断) */
+        /* 再次开启串口接收DMA中断 */
+        bsp_uart_rx_DMA_start();
     }
 }
-#endif
+
 /* USART_RX ------------------------------------------------------------------*/

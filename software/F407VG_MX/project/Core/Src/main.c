@@ -93,8 +93,10 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
   /* 用户初始化 */
-  bsp_led_init();
-  bsp_serial_init();
+  LED(1);
+  
+  bsp_uart_rx_DMA_start();
+  
   
   /* USER CODE END 2 */
 
@@ -102,8 +104,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-//      bsp_led_example();
       
+      LED_TOGGLE();
+      HAL_Delay(1000);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

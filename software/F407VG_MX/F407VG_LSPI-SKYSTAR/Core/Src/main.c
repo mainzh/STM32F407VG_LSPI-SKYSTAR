@@ -94,7 +94,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   /* 用户初始化 */
   LED(1);
-  
+  Vofa_FireWater("串口发送初始化完成\n");
   bsp_uart_rx_DMA_start();
   
   
@@ -104,7 +104,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-      
+      Vofa_FireWater("周期性串口发送\n");
       LED_TOGGLE();
       HAL_Delay(1000);
     /* USER CODE END WHILE */
